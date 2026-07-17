@@ -1,5 +1,6 @@
 ﻿import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AgentWidget } from "@/components/dashboard/agent-widget";
+import { MarketResearchWidget } from "@/components/dashboard/market-research-widget";
 
 const metrics = [
   { label: "Active Listings", value: "24" },
@@ -26,7 +27,10 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
-      <AgentWidget />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <AgentWidget />
+        <MarketResearchWidget />
+      </div>
     </div>
   );
 }
