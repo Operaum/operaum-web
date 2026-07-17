@@ -1,65 +1,106 @@
-import Image from "next/image";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Sparkles, Users, Home, Calendar, TrendingUp } from "lucide-react";
 
-export default function Home() {
+const features = [
+  {
+    icon: Users,
+    title: "Smart Lead Pipeline",
+    description: "Track, score, and follow up with leads automatically - never let a hot prospect go cold.",
+  },
+  {
+    icon: Home,
+    title: "Listings, Organized",
+    description: "Manage every property in one visual dashboard, from active to closed.",
+  },
+  {
+    icon: Calendar,
+    title: "Effortless Scheduling",
+    description: "Showings, calls, and open houses - all in one calendar that keeps you on track.",
+  },
+  {
+    icon: Sparkles,
+    title: "AI That Works For You",
+    description: "Ask your assistant anything - from prioritizing your day to drafting follow-ups.",
+  },
+];
+
+export default function LandingPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex min-h-screen flex-col">
+      <header className="flex h-16 items-center justify-between border-b border-border px-6">
+        <span className="text-xl font-bold text-foreground">Operaum</span>
+        <div className="flex items-center gap-3">
+          <Link href="/login" className={buttonVariants({ variant: "ghost" })}>
+            Log in
+          </Link>
+          <Link href="/dashboard" className={buttonVariants()}>
+            Get Started
+          </Link>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </header>
+
+      <section className="flex flex-col items-center gap-6 px-6 py-24 text-center">
+        <div className="flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs font-medium text-muted-foreground">
+          <Sparkles className="h-3 w-3 text-accent" />
+          The AI Operating System for Modern Realtors
         </div>
-      </main>
+        <h1 className="max-w-3xl text-5xl font-bold tracking-tight text-foreground sm:text-6xl">
+          Meet Your AI Co-Agent.
+        </h1>
+        <p className="max-w-xl text-lg text-muted-foreground">
+          Operaum brings your leads, listings, calendar, and AI assistant into one place,
+          so you can close more deals with less busywork.
+        </p>
+        <div className="flex items-center gap-3 pt-2">
+          <Link href="/dashboard" className={buttonVariants({ size: "lg" })}>
+            Get Started Free
+          </Link>
+          <Link href="#features" className={buttonVariants({ size: "lg", variant: "outline" })}>
+            See Features
+          </Link>
+        </div>
+      </section>
+
+      <section id="features" className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-6 px-6 pb-24 sm:grid-cols-2 lg:grid-cols-4">
+        {features.map((feature) => {
+          const Icon = feature.icon;
+          return (
+            <Card key={feature.title}>
+              <CardContent className="space-y-3 pt-6">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-semibold text-foreground">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground">{feature.description}</p>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </section>
+
+      <section className="border-t border-border bg-primary px-6 py-20 text-center">
+        <h2 className="text-3xl font-bold text-primary-foreground">
+          Ready to work smarter?
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-primary-foreground/70">
+          Join realtors using Operaum to run their entire business from one place.
+        </p>
+        <Link
+          href="/dashboard"
+          className={buttonVariants({ size: "lg", className: "mt-6 bg-accent text-accent-foreground hover:bg-accent/90" })}
+        >
+          Get Started Free
+        </Link>
+      </section>
+
+      <footer className="flex items-center justify-between border-t border-border px-6 py-6 text-sm text-muted-foreground">
+        <span>(c) 2026 Operaum. All rights reserved.</span>
+        <div className="flex gap-2">
+          <TrendingUp className="h-4 w-4" />
+        </div>
+      </footer>
     </div>
   );
 }
