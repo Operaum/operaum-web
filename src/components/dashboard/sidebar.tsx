@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,6 +8,10 @@ import {
   Home,
   Calendar,
   Sparkles,
+  BarChart3,
+  FileBarChart,
+  Workflow,
+  CreditCard,
   Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,6 +23,10 @@ const navItems: NavItem[] = [
   { label: "Listings", href: "/dashboard/listings", icon: Home },
   { label: "Calendar", href: "/dashboard/calendar", icon: Calendar },
   { label: "AI Assistant", href: "/dashboard/assistant", icon: Sparkles },
+  { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
+  { label: "Reporting", href: "/dashboard/reporting", icon: FileBarChart },
+  { label: "Automation", href: "/dashboard/automation", icon: Workflow },
+  { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
@@ -30,7 +38,7 @@ export function Sidebar() {
       <div className="flex h-16 items-center px-6">
         <span className="text-xl font-bold tracking-tight">Operaum</span>
       </div>
-      <nav className="flex-1 space-y-1 px-3 py-4">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
