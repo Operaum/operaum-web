@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+﻿import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AgentWidget } from "@/components/dashboard/agent-widget";
 
 const metrics = [
   { label: "Active Listings", value: "24" },
@@ -25,6 +26,7 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
+      <AgentWidget />
     </div>
   );
 }

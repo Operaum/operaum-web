@@ -8,6 +8,7 @@ import {
   Home,
   Calendar,
   Sparkles,
+  Bot,
   BarChart3,
   FileBarChart,
   Workflow,
@@ -20,6 +21,7 @@ import { NavItem } from "@/types/nav";
 const navItems: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
   { label: "Leads", href: "/dashboard/leads", icon: Users },
+  { label: "Lead Agent", href: "/dashboard/lead-agent", icon: Bot },
   { label: "Listings", href: "/dashboard/listings", icon: Home },
   { label: "Calendar", href: "/dashboard/calendar", icon: Calendar },
   { label: "AI Assistant", href: "/dashboard/assistant", icon: Sparkles },
