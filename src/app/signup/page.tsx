@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,9 +16,24 @@ export default function SignupPage() {
     formState: { errors, isSubmitting },
   } = useForm<SignupValues>({ resolver: zodResolver(signupSchema) });
 
-  function onSubmit(values: SignupValues) {
-    console.log("Signup submitted:", values);
-    // TODO: wire up real authentication in Phase 4
+  async function onSubmit(values: SignupValues) {
+    const response = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      alert(data.error ?? "Something went wrong. Please try again.");
+      return;
+    }
+
+    await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirectTo: "/dashboard",
+    });
   }
 
   return (
@@ -50,7 +66,7 @@ export default function SignupPage() {
 
             <div className="space-y-1">
               <label className="text-sm font-medium text-foreground">Password</label>
-              <Input type="password" placeholder="••••••••" {...register("password")} />
+              <Input type="password" placeholder="********" {...register("password")} />
               {errors.password && (
                 <p className="text-xs text-destructive">{errors.password.message}</p>
               )}

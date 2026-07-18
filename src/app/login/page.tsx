@@ -1,8 +1,9 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,9 +16,19 @@ export default function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) });
 
-  function onSubmit(values: LoginValues) {
-    console.log("Login submitted:", values);
-    // TODO: wire up real authentication in Phase 4
+  async function onSubmit(values: LoginValues) {
+    const result = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      alert("Invalid email or password.");
+      return;
+    }
+
+    window.location.href = "/dashboard";
   }
 
   return (
@@ -42,7 +53,7 @@ export default function LoginPage() {
 
             <div className="space-y-1">
               <label className="text-sm font-medium text-foreground">Password</label>
-              <Input type="password" placeholder="••••••••" {...register("password")} />
+              <Input type="password" placeholder="********" {...register("password")} />
               {errors.password && (
                 <p className="text-xs text-destructive">{errors.password.message}</p>
               )}
