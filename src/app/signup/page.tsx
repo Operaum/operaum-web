@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { signupSchema, SignupValues } from "@/lib/auth-schema";
+import { REGIONS } from "@/lib/regions";
 
 export default function SignupPage() {
   const {
@@ -36,8 +37,11 @@ export default function SignupPage() {
     });
   }
 
+  const canadaRegions = REGIONS.filter((r) => r.country === "CA");
+  const usRegions = REGIONS.filter((r) => r.country === "US");
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-6">
+    <div className="flex min-h-screen flex-col items-center justify-center px-6 py-12">
       <div className="mb-8 text-center">
         <Link href="/" className="text-2xl font-bold text-foreground">
           Operaum
@@ -69,6 +73,38 @@ export default function SignupPage() {
               <Input type="password" placeholder="********" {...register("password")} />
               {errors.password && (
                 <p className="text-xs text-destructive">{errors.password.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-foreground">
+                Province / State
+              </label>
+              <select
+                className="flex h-8 w-full rounded-lg border border-border bg-background px-2.5 text-sm"
+                {...register("region")}
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select your region
+                </option>
+                <optgroup label="Canada">
+                  {canadaRegions.map((r) => (
+                    <option key={r.code} value={r.code}>
+                      {r.name}
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="United States">
+                  {usRegions.map((r) => (
+                    <option key={r.code} value={r.code}>
+                      {r.name}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+              {errors.region && (
+                <p className="text-xs text-destructive">{errors.region.message}</p>
               )}
             </div>
 

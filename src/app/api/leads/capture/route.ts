@@ -2,6 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { leadCaptureSchema } from "@/lib/lead-capture-schema";
 import { scoreLeadSubmission } from "@/lib/lead-scoring";
+import { matchRegionFromText } from "@/lib/regions";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -12,10 +13,11 @@ export async function POST(request: Request) {
   }
 
   const values = parsed.data;
+  const matchedRegion = matchRegionFromText(values.locationsInterest);
 
-  const owner = await prisma.users.findFirst({
-    orderBy: { created_at: "asc" },
-  });
+  const owner = matchedRegion
+    ? await prisma.users.findFirst({ where: { region: matchedRegion }, orderBy: { created_at: "asc" } })
+    : await prisma.users.findFirst({ orderBy: { created_at: "asc" } });
 
   const criteria = owner
     ? await prisma.agent_criteria.findUnique({ where: { user_id: owner.id } })
@@ -57,5 +59,5 @@ export async function POST(request: Request) {
     });
   }
 
-  return NextResponse.json({ success: true, qualified: score >= minScore, score });
+  return NextResponse.json({ success: true, qualified: score >= minScore, score, region: matchedRegion });
 }

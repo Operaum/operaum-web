@@ -1,16 +1,17 @@
 ﻿import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/get-current-user";
 
 export async function POST(request: Request) {
   const body = await request.json();
+  const user = await getCurrentUser();
 
-  const owner = await prisma.users.findFirst({ orderBy: { created_at: "asc" } });
-  if (!owner) {
-    return NextResponse.json({ error: "No user found" }, { status: 404 });
+  if (!user) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
   await prisma.agent_criteria.upsert({
-    where: { user_id: owner.id },
+    where: { user_id: user.id },
     update: {
       status: body.status,
       locations: body.locations,
@@ -19,7 +20,7 @@ export async function POST(request: Request) {
       min_score: body.minScore,
     },
     create: {
-      user_id: owner.id,
+      user_id: user.id,
       status: body.status,
       locations: body.locations,
       min_budget: body.minBudget,

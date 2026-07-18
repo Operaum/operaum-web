@@ -10,17 +10,28 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/get-current-user";
 import { LeadStatusCell, LeadRowActions } from "@/components/dashboard/lead-row-actions";
 
 export default async function LeadsPage() {
-  const leads = await prisma.leads.findMany({
-    orderBy: { created_at: "desc" },
-  });
+  const user = await getCurrentUser();
+
+  const leads = user
+    ? await prisma.leads.findMany({
+        where: { user_id: user.id },
+        orderBy: { created_at: "desc" },
+      })
+    : [];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">Leads</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Leads</h1>
+          {user?.region && (
+            <p className="text-sm text-muted-foreground">Showing leads for {user.region}</p>
+          )}
+        </div>
         <Button>Add Lead</Button>
       </div>
 

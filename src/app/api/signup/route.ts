@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   }
 
-  const { name, email, password } = parsed.data;
+  const { name, email, password, region } = parsed.data;
 
   const existing = await prisma.users.findUnique({ where: { email } });
   if (existing) {
@@ -25,6 +25,15 @@ export async function POST(request: Request) {
       name,
       email,
       password_hash: passwordHash,
+      region,
+    },
+  });
+
+  await prisma.agent_criteria.create({
+    data: {
+      user_id: user.id,
+      status: "active",
+      min_score: 70,
     },
   });
 
