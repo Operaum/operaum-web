@@ -8,10 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/get-current-user";
 import { LeadStatusCell, LeadRowActions } from "@/components/dashboard/lead-row-actions";
+import { AddLeadDialog } from "@/components/dashboard/add-lead-dialog";
 
 export default async function LeadsPage() {
   const user = await getCurrentUser();
@@ -32,7 +32,7 @@ export default async function LeadsPage() {
             <p className="text-sm text-muted-foreground">Showing leads for {user.region}</p>
           )}
         </div>
-        <Button>Add Lead</Button>
+        <AddLeadDialog />
       </div>
 
       <div className="rounded-lg border border-border bg-card">
