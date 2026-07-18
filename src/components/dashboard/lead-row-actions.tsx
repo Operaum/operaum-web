@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
+import { ConfirmDeleteDialog } from "@/components/dashboard/confirm-delete-dialog";
 
 const statusStyles: Record<string, string> = {
   New: "bg-accent text-accent-foreground",
@@ -58,17 +59,43 @@ export function LeadStatusCell({ leadId, status }: { leadId: string; status: str
   );
 }
 
-export function LeadRowActions() {
+export function LeadRowActions({ leadId, leadName }: { leadId: string; leadName: string }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const router = useRouter();
+
+  async function handleDelete() {
+    const response = await fetch("/api/leads/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ leadId }),
+    });
+    if (response.ok) {
+      router.refresh();
+    }
+  }
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
-        <MoreHorizontal className="h-4 w-4" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem>View details</DropdownMenuItem>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+          <MoreHorizontal className="h-4 w-4" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>View details</DropdownMenuItem>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem className="text-destructive" onClick={() => setConfirmOpen(true)}>
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <ConfirmDeleteDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        onConfirm={handleDelete}
+        title={`Delete ${leadName}?`}
+        description="This lead and its activity history will be permanently removed. This action cannot be undone."
+      />
+    </>
   );
 }
