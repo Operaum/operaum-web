@@ -1,9 +1,6 @@
 ﻿import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
-console.log("UPSTASH URL length:", process.env.UPSTASH_REDIS_REST_URL?.length ?? "undefined");
-console.log("UPSTASH URL value starts with:", process.env.UPSTASH_REDIS_REST_URL?.slice(0, 8) ?? "undefined");
-
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
