@@ -1,7 +1,8 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Users, Home, Calendar, TrendingUp } from "lucide-react";
+import { LeadCaptureForm } from "@/components/lead-capture-form";
 
 const features = [
   {
@@ -78,6 +79,17 @@ export default function LandingPage() {
             </Card>
           );
         })}
+      </section>
+
+      <section id="demo" className="mx-auto w-full max-w-xl px-6 pb-24">
+        <div className="mb-6 text-center">
+          <h2 className="text-2xl font-bold text-foreground">See the AI Lead Agent in action</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            This is a live demo of a buyer inquiry form. Submissions are automatically scored
+            and routed by Operaum's AI Lead Agent - just like it would work on your own site.
+          </p>
+        </div>
+        <LeadCaptureForm />
       </section>
 
       <section className="border-t border-border bg-primary px-6 py-20 text-center">

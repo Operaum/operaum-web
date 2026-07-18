@@ -1,3 +1,5 @@
+﻿export const dynamic = "force-dynamic";
+
 import {
   Table,
   TableBody,
@@ -15,17 +17,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
-import { placeholderLeads } from "@/lib/placeholder-leads";
-import { LeadStatus } from "@/types/lead";
+import { prisma } from "@/lib/prisma";
 
-const statusStyles: Record<LeadStatus, string> = {
+const statusStyles: Record<string, string> = {
   New: "bg-accent text-accent-foreground",
   Contacted: "bg-secondary text-secondary-foreground",
   Qualified: "bg-primary text-primary-foreground",
   Closed: "bg-muted text-muted-foreground",
 };
 
-export default function LeadsPage() {
+export default async function LeadsPage() {
+  const leads = await prisma.leads.findMany({
+    orderBy: { created_at: "desc" },
+  });
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -42,26 +47,37 @@ export default function LeadsPage() {
               <TableHead>Phone</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Source</TableHead>
-              <TableHead>Last Contact</TableHead>
+              <TableHead>Created</TableHead>
               <TableHead className="w-10" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {placeholderLeads.map((lead) => (
+            {leads.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
+                  No leads yet. Submissions from your website will appear here.
+                </TableCell>
+              </TableRow>
+            )}
+            {leads.map((lead) => (
               <TableRow key={lead.id}>
                 <TableCell className="font-medium">{lead.name}</TableCell>
                 <TableCell className="text-muted-foreground">{lead.email}</TableCell>
                 <TableCell className="text-muted-foreground">{lead.phone}</TableCell>
                 <TableCell>
-                  <Badge className={statusStyles[lead.status]}>{lead.status}</Badge>
+                  <Badge className={statusStyles[lead.status] ?? statusStyles.New}>
+                    {lead.status}
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-muted-foreground">{lead.source}</TableCell>
-                <TableCell className="text-muted-foreground">{lead.lastContact}</TableCell>
+                <TableCell className="text-muted-foreground">
+                  {lead.created_at?.toLocaleDateString("en-CA")}
+                </TableCell>
                 <TableCell>
                   <DropdownMenu>
-                   <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
-  <MoreHorizontal className="h-4 w-4" />
-</DropdownMenuTrigger>
+                    <DropdownMenuTrigger className="inline-flex h-8 w-8 items-center justify-center rounded-md text-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>View details</DropdownMenuItem>
                       <DropdownMenuItem>Edit</DropdownMenuItem>
