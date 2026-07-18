@@ -2,8 +2,19 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signupSchema } from "@/lib/auth-schema";
+import { authRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const { success } = await authRateLimit.limit(ip);
+
+  if (!success) {
+    return NextResponse.json(
+      { error: "Too many attempts. Please try again in a minute." },
+      { status: 429 }
+    );
+  }
+
   const body = await request.json();
   const parsed = signupSchema.safeParse(body);
 

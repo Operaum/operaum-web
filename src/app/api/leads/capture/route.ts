@@ -4,8 +4,19 @@ import { leadCaptureSchema } from "@/lib/lead-capture-schema";
 import { scoreLeadSubmission } from "@/lib/lead-scoring";
 import { matchRegionFromText } from "@/lib/regions";
 import { geocodeRegion } from "@/lib/geocoding";
+import { leadRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
+  const ip = getClientIp(request);
+  const { success } = await leadRateLimit.limit(ip);
+
+  if (!success) {
+    return NextResponse.json(
+      { error: "Too many submissions. Please try again in a minute." },
+      { status: 429 }
+    );
+  }
+
   const body = await request.json();
   const parsed = leadCaptureSchema.safeParse(body);
 
