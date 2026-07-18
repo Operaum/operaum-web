@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
 import { ConfirmDeleteDialog } from "@/components/dashboard/confirm-delete-dialog";
+import { EditLeadDialog } from "@/components/dashboard/edit-lead-dialog";
 
 const statusStyles: Record<string, string> = {
   New: "bg-accent text-accent-foreground",
@@ -59,8 +60,23 @@ export function LeadStatusCell({ leadId, status }: { leadId: string; status: str
   );
 }
 
-export function LeadRowActions({ leadId, leadName }: { leadId: string; leadName: string }) {
+interface LeadRowActionsProps {
+  leadId: string;
+  leadName: string;
+  leadEmail: string | null;
+  leadPhone: string | null;
+  leadSource: string | null;
+}
+
+export function LeadRowActions({
+  leadId,
+  leadName,
+  leadEmail,
+  leadPhone,
+  leadSource,
+}: LeadRowActionsProps) {
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const router = useRouter();
 
   async function handleDelete() {
@@ -81,13 +97,22 @@ export function LeadRowActions({ leadId, leadName }: { leadId: string; leadName:
           <MoreHorizontal className="h-4 w-4" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>View details</DropdownMenuItem>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setEditOpen(true)}>Edit</DropdownMenuItem>
           <DropdownMenuItem className="text-destructive" onClick={() => setConfirmOpen(true)}>
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <EditLeadDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        leadId={leadId}
+        initialName={leadName}
+        initialEmail={leadEmail}
+        initialPhone={leadPhone}
+        initialSource={leadSource}
+      />
 
       <ConfirmDeleteDialog
         open={confirmOpen}

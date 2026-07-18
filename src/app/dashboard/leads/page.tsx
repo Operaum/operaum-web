@@ -69,7 +69,13 @@ export default async function LeadsPage() {
                   {lead.created_at?.toLocaleDateString("en-CA")}
                 </TableCell>
                 <TableCell>
-                  <LeadRowActions leadId={lead.id} leadName={lead.name} />
+                  <LeadRowActions
+  leadId={lead.id}
+  leadName={lead.name}
+  leadEmail={lead.email}
+  leadPhone={lead.phone}
+  leadSource={lead.source}
+/>
                 </TableCell>
               </TableRow>
             ))}

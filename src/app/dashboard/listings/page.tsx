@@ -7,7 +7,7 @@ import { Bed, Bath, Square } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/get-current-user";
 import { AddListingDialog } from "@/components/dashboard/add-listing-dialog";
-import { DeleteListingButton } from "@/components/dashboard/delete-listing-button";
+import { ListingCardActions } from "@/components/dashboard/listing-card-actions";
 
 const statusStyles: Record<string, string> = {
   Active: "bg-accent text-accent-foreground",
@@ -61,7 +61,16 @@ export default async function ListingsPage() {
               <Badge className={`absolute left-3 top-3 ${statusStyles[listing.status] ?? statusStyles.Active}`}>
                 {listing.status}
               </Badge>
-              <DeleteListingButton listingId={listing.id} address={listing.address} />
+              <ListingCardActions
+                listingId={listing.id}
+                address={listing.address}
+                city={listing.city}
+                price={Number(listing.price)}
+                beds={listing.beds}
+                baths={listing.baths != null ? Number(listing.baths) : null}
+                sqft={listing.sqft}
+                status={listing.status}
+              />
             </div>
             <CardContent className="space-y-2 py-4">
               <p className="text-lg font-bold text-foreground">
