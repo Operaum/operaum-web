@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { leadCaptureSchema } from "@/lib/lead-capture-schema";
 import { scoreLeadSubmission } from "@/lib/lead-scoring";
 import { matchRegionFromText } from "@/lib/regions";
+import { geocodeRegion } from "@/lib/geocoding";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -13,7 +14,11 @@ export async function POST(request: Request) {
   }
 
   const values = parsed.data;
-  const matchedRegion = matchRegionFromText(values.locationsInterest);
+
+  let matchedRegion = await geocodeRegion(values.locationsInterest);
+  if (!matchedRegion) {
+    matchedRegion = matchRegionFromText(values.locationsInterest);
+  }
 
   const owner = matchedRegion
     ? await prisma.users.findFirst({ where: { region: matchedRegion }, orderBy: { created_at: "asc" } })
