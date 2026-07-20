@@ -8,13 +8,23 @@ import { Pencil, Trash2 } from "lucide-react";
 import { EventDialog } from "@/components/dashboard/event-dialog";
 import { ConfirmDeleteDialog } from "@/components/dashboard/confirm-delete-dialog";
 
+interface ExistingEvent {
+  id: string;
+  title: string;
+  event_date: Date;
+  event_time: string | null;
+  end_time?: string | null;
+}
+
 interface EventItemProps {
   id: string;
   title: string;
   date: string;
   time: string | null;
+  endTime?: string | null;
   type: string;
   location: string | null;
+  existingEvents?: ExistingEvent[];
 }
 
 const typeStyles: Record<string, string> = {
@@ -24,7 +34,16 @@ const typeStyles: Record<string, string> = {
   "Open House": "bg-muted text-muted-foreground",
 };
 
-export function EventItem({ id, title, date, time, type, location }: EventItemProps) {
+export function EventItem({
+  id,
+  title,
+  date,
+  time,
+  endTime,
+  type,
+  location,
+  existingEvents = [],
+}: EventItemProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const router = useRouter();
@@ -40,12 +59,14 @@ export function EventItem({ id, title, date, time, type, location }: EventItemPr
     }
   }
 
+  const timeLabel = time ? (endTime ? `${time} - ${endTime}` : time) : "";
+
   return (
     <div className="flex items-center justify-between rounded-md border border-border p-3">
       <div>
         <p className="text-sm font-medium text-foreground">{title}</p>
         <p className="text-xs text-muted-foreground">
-          {date} {time ? `\u00b7 ${time}` : ""} {location ? `\u00b7 ${location}` : ""}
+          {date} {timeLabel ? `\u00b7 ${timeLabel}` : ""} {location ? `\u00b7 ${location}` : ""}
         </p>
       </div>
       <div className="flex items-center gap-2">
@@ -69,10 +90,12 @@ export function EventItem({ id, title, date, time, type, location }: EventItemPr
         initialTitle={title}
         initialDate={date}
         initialTime={time ?? ""}
+        initialEndTime={endTime ?? ""}
         initialType={type}
         initialLocation={location ?? ""}
         open={editOpen}
         onOpenChange={setEditOpen}
+        existingEvents={existingEvents}
       />
 
       <ConfirmDeleteDialog

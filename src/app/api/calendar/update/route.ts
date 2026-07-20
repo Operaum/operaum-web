@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { eventId, title, eventDate, eventTime, type, location } = body;
+  const { eventId, title, eventDate, eventTime, endTime, type, location } = body;
 
   if (!eventId || !title || !eventDate || !type) {
     return NextResponse.json({ error: "eventId, title, date, and type are required" }, { status: 400 });
@@ -26,6 +26,7 @@ export async function POST(request: Request) {
       title,
       event_date: new Date(eventDate),
       event_time: eventTime || null,
+      end_time: endTime || null,
       type,
       location: location || null,
     },
