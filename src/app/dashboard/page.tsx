@@ -1,7 +1,9 @@
 ﻿import { Card, CardContent } from "@/components/ui/card";
 import { AgentWidget } from "@/components/dashboard/agent-widget";
 import { MarketResearchWidget } from "@/components/dashboard/market-research-widget";
+import { DailyQuote } from "@/components/dashboard/daily-quote";
 import { Home, Users, Handshake, DollarSign, ArrowUpRight, ArrowDownRight } from "lucide-react";
+
 const metrics = [
   { label: "Active Listings", value: "24", change: "+3 this month", trend: "up" as const, icon: Home },
   { label: "New Leads", value: "13", change: "+5 this week", trend: "up" as const, icon: Users },
@@ -22,6 +24,8 @@ export default function DashboardPage() {
         <p className="text-sm text-muted-foreground">{today}</p>
         <h1 className="font-heading text-2xl font-bold text-foreground">Overview</h1>
       </div>
+
+      <DailyQuote />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {metrics.map((m) => {

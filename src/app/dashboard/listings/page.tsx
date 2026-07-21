@@ -73,9 +73,9 @@ export default async function ListingsPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-border/70">
+<Card className="border-border/70">
           <CardContent className="flex items-center gap-3 pt-5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
               <TrendingUp className="h-4.5 w-4.5" />
             </div>
             <div>
@@ -86,7 +86,7 @@ export default async function ListingsPage() {
         </Card>
         <Card className="border-border/70">
           <CardContent className="flex items-center gap-3 pt-5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-muted text-muted-foreground">
               <CheckCircle2 className="h-4.5 w-4.5" />
             </div>
             <div>
@@ -95,7 +95,7 @@ export default async function ListingsPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
+        </div>
 
       {listings.length === 0 && (
         <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-border bg-card py-16 text-center">
