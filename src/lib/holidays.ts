@@ -32,3 +32,11 @@ export function getHolidayForDate(date: Date): Holiday | null {
 export function getHolidayDates(): Date[] {
   return HOLIDAYS_2026.map((h) => new Date(h.date + "T00:00:00"));
 }
+
+export function getHolidaysInMonth(year: number, month: number): Holiday[] {
+  // month is 0-indexed (0 = January) to match JS Date conventions
+  return HOLIDAYS_2026.filter((h) => {
+    const d = new Date(h.date + "T00:00:00");
+    return d.getFullYear() === year && d.getMonth() === month;
+  }).sort((a, b) => a.date.localeCompare(b.date));
+}

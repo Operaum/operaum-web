@@ -34,6 +34,13 @@ const typeStyles: Record<string, string> = {
   "Open House": "bg-muted text-muted-foreground",
 };
 
+const typeBorder: Record<string, string> = {
+  Showing: "border-l-accent",
+  Call: "border-l-secondary-foreground/40",
+  Meeting: "border-l-primary",
+  "Open House": "border-l-muted-foreground/40",
+};
+
 export function EventItem({
   id,
   title,
@@ -62,26 +69,32 @@ export function EventItem({
   const timeLabel = time ? (endTime ? `${time} - ${endTime}` : time) : "";
 
   return (
-    <div className="flex items-center justify-between rounded-md border border-border p-3">
+    <div
+      className={`group flex items-center justify-between rounded-lg border border-l-4 border-border bg-card p-3 transition-colors hover:bg-muted/40 ${
+        typeBorder[type] ?? typeBorder.Showing
+      }`}
+    >
       <div>
         <p className="text-sm font-medium text-foreground">{title}</p>
         <p className="text-xs text-muted-foreground">
           {date} {timeLabel ? `\u00b7 ${timeLabel}` : ""} {location ? `\u00b7 ${location}` : ""}
         </p>
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         <Badge className={typeStyles[type] ?? typeStyles.Showing}>{type}</Badge>
-        <Button variant="ghost" size="icon-sm" onClick={() => setEditOpen(true)}>
-          <Pencil className="h-3.5 w-3.5" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="text-destructive hover:bg-destructive/10"
-          onClick={() => setConfirmOpen(true)}
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
+        <div className="flex opacity-0 transition-opacity group-hover:opacity-100">
+          <Button variant="ghost" size="icon-sm" onClick={() => setEditOpen(true)}>
+            <Pencil className="h-3.5 w-3.5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="text-destructive hover:bg-destructive/10"
+            onClick={() => setConfirmOpen(true)}
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </Button>
+        </div>
       </div>
 
       <EventDialog
