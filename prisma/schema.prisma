@@ -123,6 +123,11 @@ model users {
   brokerage       String?
   created_at      DateTime?         @default(now()) @db.Timestamptz(6)
   region          String?
+  avatar_color    String?           @default("accent")
+  instagram       String?
+  facebook        String?
+  linkedin        String?
+  tiktok          String?
   agent_activity  agent_activity[]
   agent_criteria  agent_criteria?
   calendar_events calendar_events[]
